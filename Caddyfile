@@ -1,0 +1,16 @@
+example1.com  {
+  handle_path /myverysecretpath {
+        reverse_proxy http://172.17.0.1:5000
+  }
+  reverse_proxy  web:80 {
+  }
+}
+
+example2.com  {
+  handle_path /myverysecretpath {
+        reverse_proxy http://172.17.0.1:5000
+  }
+
+        reverse_proxy http://172.17.0.1:58123
+  
+}

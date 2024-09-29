@@ -1,0 +1,142 @@
+{
+  "log": {
+    "loglevel": "info"
+  },
+  "inbounds": [
+    {
+      "tag": "VLESS TCP REALITY",
+      "listen": "172.17.0.1",
+      "port": 2443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none",
+        "fallbacks": []
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic",
+          "fakedns"
+        ],
+        "enabled": true
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "dest": "whatsapp.com:443",
+          "maxClient": "",
+          "maxTimediff": 0,
+          "minClient": "",
+          "privateKey": "Privatekey",
+          "serverNames": [
+            "web.whatsapp.com",
+            "whatsapp.com:443"
+          ],
+          "shortIds": [
+            "shortID"
+          ],
+          "show": false,
+          "xver": 0
+        },
+        "security": "reality",
+        "tcpSettings": {
+          "acceptProxyProtocol": false,
+          "header": {
+            "type": "none"
+          }
+        }
+      }
+    },
+    {
+      "tag": "VLESS WS",
+      "listen": "172.17.0.1",
+      "port": 5000,
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "nowarp",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 44444
+          }
+        ]
+      }
+    },
+    {
+      "tag": "warp",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 40000
+          }
+        ]
+      }
+    },
+    {
+      "protocol": "freedom",
+      "tag": "DIRECT"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "BLOCK"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "outboundTag": "nowarp",
+        "domain": [
+          "geosite:category-vpnservices",
+          "geoip:us",
+          "*telegram.org",
+          "*t.me"
+        ]
+      },
+      {
+        "outboundTag": "warp",
+        "domain": [
+          "geosite:openai",
+          "geosite:youtube",
+          "geosite:meta",
+          "freemyip.com",
+          "manifest.googlevideo.com",
+          "youtube.com",
+          "googlevideo.com",
+          "whoer.net"
+        ],
+        "type": "field"
+      },
+      {
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "BLOCK",
+        "type": "field"
+      },
+      {
+        "protocol": [
+          "voip"
+        ],
+        "outboundTag": "nowarp",
+        "type": "field"
+      }
+    ]
+  }
+}
